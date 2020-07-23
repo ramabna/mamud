@@ -11,7 +11,7 @@ echo color("yellow","[•] RamzTutorial Channel \n");
 echo color("yellow","[•] cara menulis nomor pakai 62xxxxxxxxxx \n");
 echo color("yellow","[•] kalo masi ga bisa .. pake aja 08xxxxxxxx \n");
 echo color("blue","[•] SCRIPT GRATIS RAMZ TUTORIAL \n");
-echo color("blue","[•] SEBELUM CLAIM \n");
+echo color("blue","[•] SEBELUM CLAIM BERDOA DULU BOSKUH \n");
 echo color("red","# # # # # # # # # # # # # # # # # # # # # # # \n");
 // function change(){
         $nama = nama();
