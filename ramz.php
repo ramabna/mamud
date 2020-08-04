@@ -99,10 +99,19 @@ echo color("red","# # # # # # # # # # # # # # # # # # # # # # # \n");
         echo "\n".color("yellow","⏳▶️ Please wait");
         for($a=1;$a<=3;$a++){
         echo color("yellow",".");
+        sleep(10);
+        }
+        $code1 = request2('/go-promotions/v1/promotions/enrollments', $token, '{"promo_code":"PESANGOFOOD2107"}');
+        $message = fetch_value($code1,'"message":"','"');
+        echo "\n".color("green","🔓▶️ Message: ".$message);
+        echo "\n".color("nevy","🔒▶️ GOPUD 5");
+        echo "\n".color("yellow","⏳▶️ Please wait");
+        for($a=1;$a<=3;$a++){
+        echo color("yellow",".");
         sleep(1);
         }
         sleep(5);
-        $boba09 = request1('/go-promotions/v1/promotions/enrollments', $token, '{"promo_code":"PESANGOFOOD2107"}');
+        $boba09 = request1('/go-promotions/v1/promotions/enrollments', $token, '{"promo_code":"MAUGOFOOD2107"}');
         $messageboba09 = fetch_value($boba09,'"message":"','"');
         echo "\n".color("green","🔓▶️ Message: ".$messageboba09);
         sleep(3);
