@@ -15,30 +15,93 @@ echo color("blue","[•] PAIDOMU MOTIVASIKU 🤣 \n");
 echo color("green","[•] JANGAN LUPA BERDOA SEBELUM CLAIM \n");
 echo color("blue","[•] SUROBOYO LOST BOJOMU SEMANGATKU WKWKW \n");
 echo color("red","# # # # # # # # # # # # # # # # # # # # # # # \n");
-// function change(){
-        $nama = nama();
-        $email = str_replace(" ", "", $nama) . mt_rand(100, 999);
-        echo color("purple","📲▶️ Nomor : ");
-        // $no = trim(fgets(STDIN));
-        $nohp = trim(fgets(STDIN));
-        $nohp = str_replace("62","62",$nohp);
-        $nohp = str_replace("(","",$nohp);
-        $nohp = str_replace(")","",$nohp);
-        $nohp = str_replace("-","",$nohp);
-        $nohp = str_replace(" ","",$nohp);
-
-        if (!preg_match('/[^+0-9]/', trim($nohp))) {
-            if (substr(trim($nohp),0,3)=='62') {
-                $hp = trim($nohp);
-            }
-            else if (substr(trim($nohp),0,1)=='0') {
-                $hp = '62'.substr(trim($nohp),1);
+function register($no)
+    {
+    $nama = nama();
+    $email = str_replace(" ", "", $nama) . mt_rand(1000, 9999);
+    $data = '{"email":"'.$email.'@gmail.com","name":"'.$nama.'","phone":"+'.$no.'","signed_up_country":"ID"}';
+    $register = request("/v5/customers", "", $data);
+    if ($register['success'] == 1)
+        {
+        return $register['data']['otp_token'];
         }
-         elseif(substr(trim($nohp), 0, 2)=='62'){
-            $hp = '6'.substr(trim($nohp), 1);
+      else
+        {
+      save("error_log.txt", json_encode($register));
+        return false;
+        }
+    }
+
+    function login($no)
+    {
+
+    $data = '{"phone":"+'.$no.'"}';
+    $register = request("/v4/customers/login_with_phone", "", $data);
+   
+    if ($register['success'] == 1)
+        {
+        return $register['data']['login_token'];
+        }
+      else
+        {
+      save("error_log.txt", json_encode($register));
+        return false;
+        }
+    }
+
+function veriflogin($otp, $token)
+    {
+    $data = '{"client_name":"gojek:cons:android","client_secret":"83415d06-ec4e-11e6-a41b-6c40088ab51e","data":{"otp":"'.$otp.'","otp_token":"'.$token.'"},"grant_type":"otp","scopes":"gojek:customer:transaction gojek:customer:readonly"}';
+    $verif = request("/v4/customers/login/verify", "", $data);
+    if ($verif['success'] == 1)
+        {
+        return $verif['data']['access_token'];
+        }
+      else
+        {
+      save("error_log.txt", json_encode($verif));
+        return false;
+        }
+    }
+function change($no)
+{
+    $data = '{"email":"' .$email . '","name":"'.$nama.'","phone":"+'.$no.'"}';
+    $change = request("/v4/customers" ,"", $data);
+    if ($change['success'] == 1) {
+        return $change;
+    }
+    else{
+        save("error_log.txt", json_encode($change));
+        return false;
+    }
+}
+function verifchange($otp,$uid)
+{
+    $data = '{"id":'.$uid.',"phone":"+'.$no.'","verificationCode":"'.$otp.'"}';
+        $verifchange = request("/v4/customer/verificationUpdateProfil" ,"",$data);
+        if ($verifchange['success'] == 1) {
+            return $verifchange;
         }
         else{
-            $hp = '1'.substr(trim($nohp),0,13);
+            save("error_log.txt", json_encode($verifchange));
+        return false;
+        }
+}
+function verif($otp, $token)
+    {
+    $data = '{"client_name":"gojek:cons:android","data":{"otp":"' . $otp . '","otp_token":"' . $token . '"},"client_secret":"83415d06-ec4e-11e6-a41b-6c40088ab51e"}';
+    $verif = request("/v5/customers/phone/verify", "", $data);
+    if ($verif['success'] == 1)
+        {
+		$h=fopen("accgojek2.txt","a");
+		fwrite($h,json_encode($verif)."\n");
+		fclose($h); 
+        return $verif['data']['access_token'];
+        }
+      else
+        {
+       save("error_log.txt", json_encode($verif));
+        return false;
         }
     }
         $data = '{"email":"'.$email.'@gmail.com","name":"'.$nama.'","phone":"+'.$hp.'","signed_up_country":"ID"}';
@@ -64,7 +127,7 @@ echo color("red","# # # # # # # # # # # # # # # # # # # # # # # \n");
         echo color("yellow",".");
         sleep(20);
         }
-        $code1 = request('/go-promotions/v1/promotions/enrollments', $token, '{"promo_code":"COBAGOFOOD2107"}');
+        $code1 = request('/go-promotions/v1/promotions/enrollments', $token, '{"promo_code":"COBAGOFOOD0508"}');
         $message = fetch_value($code1,'"message":"','"');
         if(strpos($code1, 'Promo kamu sudah bisa dipakai')){
         echo "\n".color("green","🔓▶️ Message: ".$message);
@@ -78,7 +141,7 @@ echo color("red","# # # # # # # # # # # # # # # # # # # # # # # \n");
         echo color("yellow",".");
         sleep(20);
         }
-        $code1 = request1('/go-promotions/v1/promotions/enrollments', $token, '{"promo_code":"COBAGOFOOD2107"}');
+        $code1 = request1('/go-promotions/v1/promotions/enrollments', $token, '{"promo_code":"COBAGOFOOD0508"}');
         $message = fetch_value($code1,'"message":"','"');
         if(strpos($code1, 'Promo kamu sudah bisa dipakai.')){
         echo "\n".color("green","🔓▶️ Message: ".$message);
@@ -92,7 +155,7 @@ echo color("red","# # # # # # # # # # # # # # # # # # # # # # # \n");
         echo color("yellow",".");
         sleep(10);
         }
-        $code1 = request2('/go-promotions/v1/promotions/enrollments', $token, '{"promo_code":"PESANGOFOOD2107"}');
+        $code1 = request2('/go-promotions/v1/promotions/enrollments', $token, '{"promo_code":"PESANGOFOOD0508"}');
         $message = fetch_value($code1,'"message":"','"');
         echo "\n".color("green","🔓▶️ Message: ".$message);
         echo "\n".color("nevy","🔒▶️ GOPUD 4");
@@ -101,7 +164,7 @@ echo color("red","# # # # # # # # # # # # # # # # # # # # # # # \n");
         echo color("yellow",".");
         sleep(10);
         }
-        $code1 = request2('/go-promotions/v1/promotions/enrollments', $token, '{"promo_code":"PESANGOFOOD2107"}');
+        $code1 = request2('/go-promotions/v1/promotions/enrollments', $token, '{"promo_code":"PESANGOFOOD0508"}');
         $message = fetch_value($code1,'"message":"','"');
         echo "\n".color("green","🔓▶️ Message: ".$message);
         echo "\n".color("nevy","🔒▶️ GOPUD 5");
@@ -111,7 +174,7 @@ echo color("red","# # # # # # # # # # # # # # # # # # # # # # # \n");
         sleep(1);
         }
         sleep(5);
-        $boba09 = request1('/go-promotions/v1/promotions/enrollments', $token, '{"promo_code":"MAUGOFOOD2107"}');
+        $boba09 = request1('/go-promotions/v1/promotions/enrollments', $token, '{"promo_code":"MAUGOFOOD0508"}');
         $messageboba09 = fetch_value($boba09,'"message":"','"');
         echo "\n".color("green","🔓▶️ Message: ".$messageboba09);
         sleep(3);
