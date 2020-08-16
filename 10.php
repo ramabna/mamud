@@ -1,6 +1,6 @@
 <?php
 date_default_timezone_set('Asia/Jakarta');
-include "func.php";
+include "function1.php";
 echo color("nevy","?] Token: ");
 $token = trim(fgets(STDIN));
 echo "\n".color("nevy","?] Mau Redeem Voucher?: y/n ");
